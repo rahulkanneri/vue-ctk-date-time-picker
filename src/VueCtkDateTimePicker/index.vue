@@ -168,7 +168,7 @@
           return dateTime
         },
         set (value) {
-          if (this.autoClose && this.range && (value.end && value.start)) {
+          if (this.autoClose && this.range && (!value.end && !value.start)) {
             this.closePicker()
           } else if (this.autoClose && !this.range) {
             this.closePicker()
@@ -341,21 +341,13 @@
         if (this.position) {
           return this.position
         } else {
-          const parentRect = this.$refs.parent.getBoundingClientRect()
-          const windowHeight = window.innerHeight
-          let datePickerHeight = 445
-
-          datePickerHeight = this.noButton ? datePickerHeight - 41 : datePickerHeight
-          datePickerHeight = this.noHeader ? datePickerHeight - 58 : datePickerHeight
-          if (parentRect.top < datePickerHeight) {
-            // No place on top --> bottom
-            return 'bottom'
-          } else if (windowHeight - (parentRect.height + datePickerHeight + parentRect.top) >= 0) {
-            // Have place on bottom --> bottom
-            return 'bottom'
+          const windowHeight = document.querySelector(window).height();
+          const datepickerHeight = document.querySelector('.datepicker.flex-direction-column').height();
+          const datepickerOffset = document.querySelector('.datepicker.flex-direction-column').offset();
+          if (datepickerOffset.top + datepickerHeight > windowHeight) {
+            return `${datepickerOffset.top - datepickerHeight}px !important`
           } else {
-            // No place on bottom --> top
-            return 'top'
+            return `${datepickerOffset.top}px !important`;
           }
         }
       },

@@ -5,12 +5,11 @@
     <div
       v-show="visible || inline"
       :class="{'inline': inline, 'is-dark': dark, 'visible': visible}"
-      :style="responsivePosition"
       class="datetimepicker flex"
       @click.stop
     >
       <div
-        :style="[responsivePosition, width]"
+        :style="[width]"
         class="datepicker flex flex-direction-column"
         :class="{ 'right': right }"
       >
@@ -169,14 +168,7 @@
       },
       responsivePosition () {
         if (typeof window === 'undefined') return null
-
-        return !this.inline
-          ? window.innerWidth < 412
-            ? null
-            : this.position === 'bottom'
-              ? { top: '100%', marginBottom: '10px' }
-              : { bottom: '100%', marginTop: '10px' }
-          : null
+        return { top: `${this.position}` };
       },
       timeFormat () {
         return this.onlyTime
@@ -335,7 +327,7 @@
       z-index: 999;
     }
     .datepicker {
-      position: absolute;
+      position: fixed;
       z-index: 5;
       border-radius: 4px;
       overflow: hidden;
